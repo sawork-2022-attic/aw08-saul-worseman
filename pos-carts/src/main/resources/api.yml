@@ -1,0 +1,133 @@
+openapi: 3.0.0
+info:
+  title: Carts
+  description: Carts
+  version: 1.0.0
+  license:
+    name: MIT
+paths:
+  /cart/create:
+    post:
+      summary: create a cart
+      operationId: createCart
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Cart'
+        '404':
+          description: Cart not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      tags:
+        - cart
+
+  /cart/checkout/{cartId}:
+    post:
+      summary: checkout a cart
+      operationId: checkout
+      parameters:
+        - name: cartId
+          in: path
+          required: true
+          description: The id of the cart to retrieve
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Success
+        '404':
+          description: Cart not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+
+  /cart/add/{cartId}/{productId}:
+    post:
+      summary: Add a product to cart
+      operationId: addProduct
+      parameters:
+        - name: cartId
+          in: path
+          description: Cart Id
+          required: true
+          schema:
+            type : integer
+            format: int64
+        - name: productId
+          in: path
+          description: Product ID
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Cart'
+        '404':
+          description: Cart not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      tags:
+        - cart
+components:
+  schemas:
+    Item:
+      type: object
+      required:
+        - productId
+        - quantity
+      properties:
+        productId:
+          type: integer
+          format: int64
+        quantity:
+          type: number
+    Cart:
+      type: object
+      properties:
+        cartId:
+          type: integer
+          format: int64
+        items:
+          type: array
+          items:
+            $ref: "#/components/schema/Item"
+    Error:
+      type: object
+      required:
+        - code
+        - message
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+
+    Order:
+      type: object
+      properties:
+        cartId:
+          type: integer
+          format: int64
+        orderId:
+          type: integer
+          format: int64
+        totalPrice:
+          type: double
+        status:
+          type: string

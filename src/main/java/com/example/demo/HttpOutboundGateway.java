@@ -16,7 +16,7 @@ public class HttpOutboundGateway {
                         .httpMethod(HttpMethod.GET)
                         .expectedResponseType(Joke.class))
                 .<Joke, String>transform((j) -> j.getValue())
-                .handle(System.out::println)
+                //.handle(System.out::println)
                 .get();
     }
 }
